@@ -12,8 +12,11 @@ import (
 const (
 	// CapabilityID is the id the Platform registers this module under.
 	CapabilityID = "remote-playback"
-	// moduleVersion is this module's own version, reported in its Manifest.
-	moduleVersion = "0.1.0"
+	// modulePath is this module's import path, which is how it looks its own
+	// version up in the build graph rather than carrying a constant that has to
+	// be remembered at release time (SDK v0.12.0). The constant this replaces
+	// had already drifted once — it read 0.0.1 against a v0.1.0 tag.
+	modulePath = "github.com/mosaic-media/module-remote-playback"
 )
 
 // Capability satisfies the SDK's capability contract and the one role it
@@ -39,7 +42,7 @@ func New() *Capability { return &Capability{} }
 func (c *Capability) Manifest() v1.Manifest {
 	return v1.Manifest{
 		ID:       CapabilityID,
-		Version:  moduleVersion,
+		Version:  v1.ModuleVersion(modulePath),
 		Name:     "Remote Playback",
 		Provides: []v1.Role{v1.RolePlayback},
 	}
