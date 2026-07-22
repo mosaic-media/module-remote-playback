@@ -13,7 +13,7 @@ const (
 	// CapabilityID is the id the Platform registers this module under.
 	CapabilityID = "remote-playback"
 	// moduleVersion is this module's own version, reported in its Manifest.
-	moduleVersion = "0.0.1"
+	moduleVersion = "0.1.0"
 )
 
 // Capability satisfies the SDK's capability contract and the one role it
