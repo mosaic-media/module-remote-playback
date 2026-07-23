@@ -1,0 +1,53 @@
+# The remote-playback module's test container.
+#
+#   docker compose -f docker-compose.test.yml run --rm test
+#
+# This is the sanctioned way to run this repository's gates. Nothing is built
+# or tested on the host.
+#
+# What this container is really asserting is the **boundary**: this module
+# compiles against the published SDK and the standard library and nothing else,
+# which boundary_test.go enforces by parsing every import. A host with a
+# populated module cache and a stray `replace` can satisfy an import that a
+# third party's machine could not — so the check is only worth as much as the
+# environment it ran in. Here the toolchain is pinned and the dependencies are
+# resolved from the proxy, exactly as a consumer resolves them.
+#
+# For a shell in the same environment:
+#
+#   docker compose -f docker-compose.test.yml run --rm test bash
+name: mosaic-remote-playback-test
+
+services:
+  test:
+    # Pinned to go.mod's `go` directive. Bump both together.
+    image: golang:1.25-bookworm
+    working_dir: /src/module-remote-playback
+    environment:
+      # The bind mount carries a .git the container has no business stat-ing,
+      # and Go fails the build on its ownership rather than degrading.
+      GOFLAGS: -buildvcs=false
+    volumes:
+      - .:/src/module-remote-playback
+      - mosaic-remote-playback-gomod:/go/pkg/mod
+      - mosaic-remote-playback-gobuild:/root/.cache/go-build
+    command:
+      - bash
+      - -eu
+      - -o
+      - pipefail
+      - -c
+      - |
+        gofmt -l . > /tmp/unformatted
+        if [ -s /tmp/unformatted ]; then
+          echo "These files are not gofmt-clean:" >&2
+          cat /tmp/unformatted >&2
+          exit 1
+        fi
+        go build ./...
+        go vet ./...
+        go test ./...
+
+volumes:
+  mosaic-remote-playback-gomod:
+  mosaic-remote-playback-gobuild:

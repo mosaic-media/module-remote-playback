@@ -40,6 +40,21 @@ The `Part` is a *hint about what to play*, not a durable address: a debrid link
 snapshotted at import has very likely expired, which is why the Platform
 resolves at play time rather than reading the location out of the graph.
 
+## Build and test
+
+**Everything runs in a container; nothing is built or tested on the host.**
+
+```bash
+docker compose -f docker-compose.test.yml run --rm test
+```
+
+That runs gofmt, `go build`, `go vet` and `go test` against a pinned toolchain,
+resolving the published SDK from the module proxy exactly as a third party
+would — which is what makes `boundary_test.go` mean something: this module
+compiles against the SDK and the standard library and nothing else, and a host
+with a stray `replace` or a leftover `go.work` could satisfy an import it should
+not.
+
 ## Status
 
 `v0.0.1`, the direct path only. Named and deferred, not missed:
