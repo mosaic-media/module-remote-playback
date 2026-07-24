@@ -41,9 +41,9 @@ func New() *Capability { return &Capability{} }
 // fills.
 func (c *Capability) Manifest() v1.Manifest {
 	return v1.Manifest{
-		ID:       CapabilityID,
-		Version:  v1.ModuleVersion(modulePath),
-		Name: "Remote Playback",
+		ID:      CapabilityID,
+		Version: v1.ModuleVersion(modulePath),
+		Name:    "Remote Playback",
 		Description: "Resolves a title into something playable and hands back where it lives. It " +
 			"serves no bytes itself — the stream comes from wherever it already is.",
 		Provides: []v1.Role{v1.RolePlayback},
