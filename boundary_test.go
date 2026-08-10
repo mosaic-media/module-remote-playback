@@ -14,7 +14,7 @@ import (
 // executable: this module must use only the published SDK and the standard
 // library. It is a separate Go module, so Go itself already rejects a
 // Platform-internal import; this parse keeps the intent explicit and catches a
-// third-party dependency creeping in too (ADR 0008, ADR 0016).
+// third-party dependency creeping in too (sdk#1, platform#12).
 //
 // It matters more here than for a source module. A consumer is the one that
 // wants to reach the network, hold a credential and eventually touch the disk,

@@ -21,19 +21,19 @@ const (
 
 // Capability satisfies the SDK's capability contract and the one role it
 // declares. The assertions fail to compile if the module drifts from what the
-// Platform resolves, or from a role it claims to fill (ADR 0027).
+// Platform resolves, or from a role it claims to fill (sdk#2).
 var (
 	_ v1.Capability       = (*Capability)(nil)
 	_ v1.PlaybackProvider = (*Capability)(nil)
 )
 
-// Capability is the remote playback module (ADR 0045's RolePlayback, first
+// Capability is the remote playback module (platform#25's RolePlayback, first
 // filled). It is stateless: everything it needs arrives in the request, which
 // is what lets it stay a pure function of the Part it is handed.
 type Capability struct{}
 
 // New builds the capability. It takes no arguments today; when the debrid and
-// torrent paths arrive they are configured through module settings (ADR 0021),
+// torrent paths arrive they are configured through module settings (platform#17),
 // which reach it per-request rather than at construction.
 func New() *Capability { return &Capability{} }
 

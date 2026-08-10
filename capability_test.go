@@ -45,7 +45,7 @@ func TestResolveDirectURL(t *testing.T) {
 	}
 }
 
-// TestResolveMagnetFailsWithTheReason pins the honest failure ADR 0045 asks
+// TestResolveMagnetFailsWithTheReason pins the honest failure platform#25 asks
 // for. A magnet is the common case for a source with no debrid behind it, and
 // it must not silently produce a URL nothing can open — the message has to name
 // the missing piece, because that is what the UI shows a user.

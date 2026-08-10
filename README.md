@@ -14,8 +14,8 @@ virtual plane. This one goes the other way: it acts on what materialising
 created, turning a `Part`'s stored location into somewhere the bytes can
 actually be fetched from. Until it existed the library was inert, and a user
 could add a film that nothing could play
-([ADR 0036](https://github.com/mosaic-media/architecture/blob/main/docs/adr/0036-capability-gated-affordances.md),
-[ADR 0045](https://github.com/mosaic-media/architecture/blob/main/docs/adr/0045-playback-consumer-and-media-origin.md)).
+([platform#24](https://github.com/mosaic-media/platform/blob/main/docs/adr/0024-capability-gated-affordances.md),
+[platform#25](https://github.com/mosaic-media/platform/blob/main/docs/adr/0025-playback-consumer-and-media-origin.md)).
 
 ## What it does
 
@@ -62,13 +62,13 @@ not.
 - **The torrent engine** — the `Served` resolution, where the module produces
   bytes for the Platform to serve. It is what a magnet needs.
 - **Candidate selection against a client capability profile**
-  ([ADR 0048](https://github.com/mosaic-media/architecture/blob/main/docs/adr/0048-stream-selection-against-a-client-profile.md)),
+  ([platform#27](https://github.com/mosaic-media/platform/blob/main/docs/adr/0027-stream-selection-against-a-client-profile.md)),
   which is what makes a browser able to play anything at all reliably.
 - **Subtitle conversion** (SRT→VTT) through the same origin.
 
 Playback position and watched state are Platform-owned and deliberately not
 this module's
-([ADR 0046](https://github.com/mosaic-media/architecture/blob/main/docs/adr/0046-playback-state-is-platform-owned.md)):
+([platform#26](https://github.com/mosaic-media/platform/blob/main/docs/adr/0026-playback-state-is-platform-owned.md)):
 a second player, or an export module, has to read the same state.
 
 ## License

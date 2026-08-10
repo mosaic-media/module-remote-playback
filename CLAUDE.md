@@ -1,7 +1,7 @@
 # Claude Instructions — module-remote-playback
 
 This repository is an **optional Mosaic module**, and the first **consumer** one
-([ADR 0045](https://github.com/mosaic-media/architecture/blob/main/docs/adr/0045-playback-consumer-and-media-origin.md)).
+([platform#25](https://github.com/mosaic-media/platform/blob/main/docs/adr/0025-playback-consumer-and-media-origin.md)).
 Every module before it is a *source* that brings content in; this one acts on
 what materialising created, turning a `Part`'s stored location into somewhere the
 bytes can actually be fetched from.
@@ -21,27 +21,27 @@ the third-party way exists.
   wants to reach the network, hold a credential and eventually touch the disk, so
   it is the one most likely to grow a dependency it should not have.
 - **This module resolves; it never serves bytes.** The Platform hosts the origin,
-  mints the ticket and relays (ADR 0045). Putting the byte path here would hand a
+  mints the ticket and relays ([platform#25](https://github.com/mosaic-media/platform/blob/main/docs/adr/0025-playback-consumer-and-media-origin.md)). Putting the byte path here would hand a
   module the thing the whole contract keeps away from it, and would put an ffmpeg
   dependency behind the SDK boundary. If a change here starts to look like an
   HTTP handler, stop.
 - **The same line runs through the SDK itself: it names no implementation and
   depends on nothing**
-  ([ADR 0135](https://github.com/mosaic-media/architecture/blob/main/docs/adr/0135-the-sdk-carries-no-implementation.md)).
+  ([sdk#10](https://github.com/mosaic-media/sdk/blob/main/docs/adr/0010-the-sdk-carries-no-implementation.md)).
   The SDK says how a module interacts with the Platform; the Platform holds the
   implementations. A consumer feels this first, because the things a consumer
   wants — a byte path, a fetcher, a credential store — are implementations, and
   the answer is a Platform facility reached declaratively, not a primitive added
   to the contract.
 - **It owns no schema and writes nothing.** Playback *state* is Platform-owned
-  ([ADR 0046](https://github.com/mosaic-media/architecture/blob/main/docs/adr/0046-playback-state-is-platform-owned.md)),
+  ([platform#26](https://github.com/mosaic-media/platform/blob/main/docs/adr/0026-playback-state-is-platform-owned.md)),
   and a module owning a store is ruled out
-  ([ADR 0012](https://github.com/mosaic-media/architecture/blob/main/docs/adr/0012-capabilities-do-not-own-stores.md)).
+  ([platform#8](https://github.com/mosaic-media/platform/blob/main/docs/adr/0008-capabilities-do-not-own-stores.md)).
 - **Fail with the reason named.** A magnet this module cannot resolve is an
   honest, specific failure — not an empty success, and not a generic error. Refs
   are truncated in error text because they reach logs and may carry a credential.
 - **MIT-licensed**, the author's choice, unlike the Platform's AGPL
-  ([ADR 0022](https://github.com/mosaic-media/architecture/blob/main/docs/adr/0022-licensing.md)).
+  ([platform#1](https://github.com/mosaic-media/platform/blob/main/docs/adr/0001-transactional-store-extensibility.md)).
 
 ## Versioning and release
 
@@ -84,7 +84,7 @@ from the proxy exactly as a consumer does, so the test means what it claims.
 - **Commit author identity** must be `AdamNi-7080 <anicholls41@gmail.com>`.
 - The test container green before pushing.
 - Observability goes through the SDK's ambient `v1.Telemetry`
-  ([ADR 0059](https://github.com/mosaic-media/architecture/blob/main/docs/adr/0059-modules-observe-through-the-sdk.md)),
+  ([sdk#5](https://github.com/mosaic-media/sdk/blob/main/docs/adr/0005-modules-observe-through-the-sdk.md)),
   reached as `TelemetryFrom(ctx)`. Do not print, and do not configure an
   exporter, a sink or retention — the Platform owns the observability plane.
 
