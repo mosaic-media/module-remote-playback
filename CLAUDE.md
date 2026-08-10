@@ -25,6 +25,14 @@ the third-party way exists.
   module the thing the whole contract keeps away from it, and would put an ffmpeg
   dependency behind the SDK boundary. If a change here starts to look like an
   HTTP handler, stop.
+- **The same line runs through the SDK itself: it names no implementation and
+  depends on nothing**
+  ([ADR 0135](https://github.com/mosaic-media/architecture/blob/main/docs/adr/0135-the-sdk-carries-no-implementation.md)).
+  The SDK says how a module interacts with the Platform; the Platform holds the
+  implementations. A consumer feels this first, because the things a consumer
+  wants — a byte path, a fetcher, a credential store — are implementations, and
+  the answer is a Platform facility reached declaratively, not a primitive added
+  to the contract.
 - **It owns no schema and writes nothing.** Playback *state* is Platform-owned
   ([ADR 0046](https://github.com/mosaic-media/architecture/blob/main/docs/adr/0046-playback-state-is-platform-owned.md)),
   and a module owning a store is ruled out
