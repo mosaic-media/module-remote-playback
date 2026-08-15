@@ -136,9 +136,11 @@ rather than repeating what they say.
 
 If a decision *does* become this repository's — one whose mechanism is a file
 here — it earns `docs/adr/0001-…` and a generated `docs/adr/README.md` index.
-The index script and the citation lint that `architecture` owns for the fleet are
-**not vendored here**, so nothing in this repository's gate would check that the
-index is current or that a citation resolves. Until they are, both are on you.
+The citation lint that `architecture` owns for the fleet is **vendored into
+`scripts/` and run by this repository's gate**, so an unresolvable citation
+refuses a push. The index generator is not vendored, because there is no index to
+check until this repository owns a record. **Do not edit the vendored copy here**
+— its source is `architecture/scripts/`, and it is re-vendored from there.
 
 ## Observability
 
