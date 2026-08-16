@@ -27,9 +27,9 @@ func TestManifestDeclaresOnlyThePlaybackRole(t *testing.T) {
 	}
 }
 
-// TestResolveDirectURL is the path that makes the skeleton work end to end: an
-// aggregator addon pointed at a debrid backend hands back a plain https URL,
-// and the module passes it through for the Platform's origin to relay.
+// TestResolveDirectURL pins the direct path: an aggregator addon pointed at a
+// debrid backend hands back a plain https URL, and the module passes it through
+// for the Platform's origin to relay.
 func TestResolveDirectURL(t *testing.T) {
 	const ref = "https://cdn.example/dl/abc123/movie.mp4"
 
@@ -46,9 +46,9 @@ func TestResolveDirectURL(t *testing.T) {
 }
 
 // TestResolveMagnetFailsWithTheReason pins the honest failure platform#25 asks
-// for. A magnet is the common case for a source with no debrid behind it, and
-// it must not silently produce a URL nothing can open — the message has to name
-// the missing piece, because that is what the UI shows a user.
+// for. A magnet is the common case for a source with no debrid behind it, and it
+// must not silently produce a URL nothing can open: the message has to name the
+// missing piece, because that message is what the UI shows a user.
 func TestResolveMagnetFailsWithTheReason(t *testing.T) {
 	_, err := remoteplayback.New().Resolve(context.Background(),
 		v1.PlaybackRequest{Part: remotePart("magnet:?xt=urn:btih:0123456789abcdef")})
@@ -80,9 +80,10 @@ func TestResolveRejectsUnusableLocations(t *testing.T) {
 	}
 }
 
-// TestErrorsDoNotQuoteAWholeCredentialedURL guards a small but real leak: an
-// unusable reference ends up in an error, and errors end up in logs a user
-// pastes into an issue. A signed debrid URL must not travel that way in full.
+// TestErrorsDoNotQuoteAWholeCredentialedURL pins the truncation of a quoted
+// reference. An unusable reference ends up in an error, errors end up in logs a
+// user pastes into an issue, and a signed debrid URL must not travel that way in
+// full.
 func TestErrorsDoNotQuoteAWholeCredentialedURL(t *testing.T) {
 	long := "ftp://cdn.example/" + strings.Repeat("s3cret", 20)
 
@@ -95,8 +96,8 @@ func TestErrorsDoNotQuoteAWholeCredentialedURL(t *testing.T) {
 	}
 }
 
-// TestImportRefuses records that a consumer module is not a source. Returning
-// an empty success would let a mis-routed import look like it worked.
+// TestImportRefuses pins that a consumer module is not a source. Returning an
+// empty success would let a mis-routed import look like it worked.
 func TestImportRefuses(t *testing.T) {
 	if _, err := remoteplayback.New().Import(context.Background(), nil, v1.ImportRequest{}); err == nil {
 		t.Fatal("Import succeeded; a playback module materialises nothing and must say so")

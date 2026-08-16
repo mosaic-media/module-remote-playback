@@ -14,12 +14,13 @@ import (
 // executable: this module must use only the published SDK and the standard
 // library. It is a separate Go module, so Go itself already rejects a
 // Platform-internal import; this parse keeps the intent explicit and catches a
-// third-party dependency creeping in too (sdk#1, platform#12).
+// third-party dependency creeping in too (sdk#1, platform#12). A consumer is the
+// module most likely to want the network, a credential and eventually the disk,
+// so it is the one most likely to grow a dependency it should not have.
 //
-// It matters more here than for a source module. A consumer is the one that
-// wants to reach the network, hold a credential and eventually touch the disk,
-// so it is the one most likely to grow a dependency it should not have — and it
-// is exactly the kind of module a third party will write.
+// It reads this directory only, not the tree, which holds while every source
+// file is here. Adding a subdirectory means making this walk, or the boundary is
+// declared clean while the new file is never read.
 func TestModuleImportsOnlyPublishedContracts(t *testing.T) {
 	const (
 		sdkPrefix      = "github.com/mosaic-media/sdk/"
@@ -53,7 +54,7 @@ func TestModuleImportsOnlyPublishedContracts(t *testing.T) {
 			// Standard-library imports have no dot in their first segment.
 			case !strings.Contains(strings.SplitN(path, "/", 2)[0], "."):
 			case strings.HasPrefix(path, sdkPrefix):
-				// The published SDK — the primary contract a module builds against.
+				// The published SDK, which is what a module builds against.
 			case strings.HasPrefix(path, platformPrefix):
 				t.Errorf("%s imports private Platform package %q; a module may import only the SDK", name, path)
 			default:
